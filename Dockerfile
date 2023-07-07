@@ -1,5 +1,5 @@
 ########## ----- Base Image ----- ##########
-FROM ubuntu:latest AS base
+FROM ubuntu:23.10 AS base
 
 LABEL Author="PunGrumpy"
 
