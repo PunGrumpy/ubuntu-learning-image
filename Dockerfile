@@ -42,6 +42,6 @@ WORKDIR /home/${USERNAME}
 
 COPY ./scripts /home/${USERNAME}/.scripts
 
-COPY ./config/* /home/${USERNAME}
+COPY ./config/* /home/${USERNAME}/
 
 CMD ["/bin/bash"]
