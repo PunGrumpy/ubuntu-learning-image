@@ -26,8 +26,7 @@ RUN pip3 install --upgrade pip
 ########## ----- User Image ----- ##########
 FROM base AS user
 
-# ARG USERNAME=default
-ENV USERNAME=default
+ARG USERNAME=default
 
 RUN useradd -ms /bin/bash ${USERNAME}
 
