@@ -31,7 +31,7 @@ docker pull pungrumpy/ubuntu-learning
 ### `🏃` Run the container
 
 ```bash
-docker run -it --rm --name ubuntu-learning -e USERNAME=<your-username> pungrumpy/ubuntu-learning
+docker run -it --rm --name ubuntu-learning pungrumpy/ubuntu-learning
 ```
 
 > **Note**: If you userr `--rm` flag, all data will be lost after exiting the container. and if you want to keep the data, should remove the `--rm` flag.
