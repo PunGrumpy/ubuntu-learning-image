@@ -7,7 +7,7 @@ echo " * Documentation:  https://help.ubuntu.com"
 echo " * Management:     https://landscape.canonical.com"
 echo " * Support:        https://ubuntu.com/advantage"
 echo
-echo "  System information as of $(date "+%a %b %e %T UTC%:z %Y" | sed 's/:/+/')"
+echo "  System information as of $(date)"
 echo
 echo "$(landscape-sysinfo)"
 echo
