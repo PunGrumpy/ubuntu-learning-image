@@ -1,6 +1,7 @@
 #!/bin/bash
 
-echo "Welcome to Ubuntu $(lsb_release -rs) (GNU/Linux $(uname -r))"
+clear
+echo "Welcome $(uname -n) to Ubuntu $(lsb_release -rs) (GNU/Linux $(uname -r))"
 echo
 echo " * Documentation:  https://help.ubuntu.com"
 echo " * Management:     https://landscape.canonical.com"
