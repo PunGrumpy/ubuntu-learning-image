@@ -56,6 +56,16 @@ change_directory() {
     echo "${RESET}"
 }
 
+# Create a new file
+create_file() {
+    read -p "${CYAN}Enter a file name: " file
+
+    touch "$current_dir/$file"
+    echo "Created file: $current_dir/$file"
+
+    echo "${RESET}"
+}
+
 # Read the contents of a file
 read_file() {
     read -p "${CYAN}Enter a file name (or leave blank to show all files in the current directory): " file
