@@ -15,6 +15,7 @@ RESET=$(tput sgr0)
 
 # Welcome message
 welcome_message() {
+    clear
     echo "${BLUE}Welcome to the Linux Adventure Game!"
     echo "Your mission is to find the hidden treasure."
     echo "Good luck!"
