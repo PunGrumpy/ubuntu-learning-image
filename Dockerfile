@@ -3,23 +3,19 @@ FROM ubuntu:23.10 AS base
 
 LABEL Author="PunGrumpy"
 
-RUN apt update -y \
-    && apt upgrade -y \
-    && apt-get update -y \
-    && apt-get upgrade -y \
-    && apt install -y \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     sudo \
     git \
     landscape-common \
     build-essential \
     gcc \
     cmake \
+    lsd \
     python3 \
-    python3-pip \
-    python3-dev \
-    curl
-
-RUN apt clean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ########## ----- User Image ----- ##########
@@ -27,17 +23,14 @@ FROM base AS user
 
 ARG USERNAME=default
 
-RUN useradd -ms /bin/bash ${USERNAME}
-
-RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN useradd -ms /bin/bash ${USERNAME} \
+    && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${USERNAME}
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
-
-RUN cargo install lsd
 
 WORKDIR /home/${USERNAME}
 
