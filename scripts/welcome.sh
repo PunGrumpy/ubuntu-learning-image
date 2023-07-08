@@ -16,3 +16,4 @@ if [[ $updates -gt 0 ]]; then
 else
   echo "No updates available."
 fi
+echo "If you are new to Linux, you can play a game to learn the basics. (Type 'game_beginner' to play)"

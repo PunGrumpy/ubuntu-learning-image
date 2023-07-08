@@ -8,6 +8,7 @@ RUN apt update -y \
     && apt-get update -y \
     && apt-get upgrade -y \
     && apt install -y \
+    sudo \
     git \
     landscape-common \
     build-essential \
@@ -21,14 +22,14 @@ RUN apt update -y \
 RUN apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --upgrade pip
-
 ########## ----- User Image ----- ##########
 FROM base AS user
 
 ARG USERNAME=default
 
 RUN useradd -ms /bin/bash ${USERNAME}
+
+RUN echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${USERNAME}
 
@@ -43,5 +44,9 @@ WORKDIR /home/${USERNAME}
 COPY ./scripts /home/${USERNAME}/.scripts
 
 COPY ./config/* /home/${USERNAME}/
+
+RUN sudo chmod +x /home/${USERNAME}/.scripts/*
+
+RUN sudo cp /home/${USERNAME}/.scripts/game_beginner.sh /usr/bin/game_beginner
 
 CMD ["/bin/bash"]
