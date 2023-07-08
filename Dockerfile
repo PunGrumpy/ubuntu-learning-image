@@ -28,6 +28,8 @@ RUN useradd -ms /bin/bash ${USERNAME} \
 
 USER ${USERNAME}
 
+ENV USERNAME=${USERNAME}
+
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
