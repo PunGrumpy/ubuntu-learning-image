@@ -1,11 +1,11 @@
 #!/bin/bash
 
-if command -v lsd &> /dev/null
+if command -v eza &> /dev/null
 then
-    alias ls='lsd'
-    alias ll='lsd -l'
-    alias la='lsd -a'
-    alias lla='lsd -la'
-    alias lt='lsd --tree'
-    alias llt='lsd -lt'
+    alias ls='eza'
+    alias ll='eza -l'
+    alias la='eza -a'
+    alias lla='eza -la'
+    alias lt='eza --tree'
+    alias llt='eza -lt'
 fi
