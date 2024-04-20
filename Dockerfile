@@ -39,6 +39,7 @@ RUN useradd -ms /bin/bash ${USER} \
     && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 USER ${USER}
+ENV USER=${USER}
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/home/${USER}/.cargo/bin:${PATH}"
