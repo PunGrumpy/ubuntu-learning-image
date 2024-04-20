@@ -11,9 +11,12 @@ MAGENTA=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
+# Global variable
+current_dir=$(pwd)
+
 #########################################################################################
 
-# Welcome message
+# Display a welcome message
 welcome_message() {
     clear
     echo "${BLUE}Welcome to the Linux Adventure Game!"
@@ -22,17 +25,25 @@ welcome_message() {
     echo "${RESET}"
 }
 
-# Display current directory
+# Display the current directory
 display_directory() {
-    echo "${YELLOW}Current directory: $current_dir"
+    echo "${YELLOW}Current directory: $current_dir${RESET}"
+}
+
+# List files and directories
+list_files() {
+    echo "${MAGENTA}Listing files and directories:"
+    ls -l --group-directories-first "$current_dir"
     echo "${RESET}"
 }
 
-# List files and directories in the current directory
-list_files() {
-    echo "${MAGENTA}Listing files and directories:"
-    ls -l --group-directories-first $current_dir
-    echo "${RESET}"
+# Validate input for directory or file names
+validate_name() {
+    if [[ -z "$1" ]]; then
+        echo "${RED}Name cannot be empty!${RESET}"
+        return 1
+    fi
+    return 0
 }
 
 # Change to a new directory
@@ -43,27 +54,35 @@ change_directory() {
         echo "${CYAN}Available directories in $current_dir:"
         find "$current_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;
     else
+        if ! validate_name "$directory"; then
+            return
+        fi
+
         new_dir="$current_dir/$directory"
 
         if [ -d "$new_dir" ]; then
             current_dir="$new_dir"
             echo "Changed directory to: $current_dir"
         else
-            echo "${RED}Directory not found!"
+            echo "${RED}Directory not found!${RESET}"
         fi
     fi
-
-    echo "${RESET}"
 }
 
 # Create a new file
 create_file() {
     read -p "${CYAN}Enter a file name: " file
 
-    touch "$current_dir/$file"
-    echo "Created file: $current_dir/$file"
+    if ! validate_name "$file"; then
+        return
+    fi
 
-    echo "${RESET}"
+    if [ -e "$current_dir/$file" ]; then
+        echo "${YELLOW}File already exists!${RESET}"
+    else
+        touch "$current_dir/$file"
+        echo "Created file: $current_dir/$file"
+    fi
 }
 
 # Read the contents of a file
@@ -76,70 +95,75 @@ read_file() {
         echo "${MAGENTA}Contents of $file:"
         cat "$current_dir/$file"
     else
-        echo "${RED}File not found!"
+        echo "${RED}File not found!${RESET}"
     fi
-
-    echo "${RESET}"
 }
 
 # Create a new directory
 create_directory() {
     read -p "${CYAN}Enter a directory name: " directory
 
+    if ! validate_name "$directory"; then
+        return
+    fi
+
     mkdir -p "$current_dir/$directory"
     echo "Created directory: $current_dir/$directory"
-
-    echo "${RESET}"
 }
 
 # Remove a file or directory
 remove_item() {
     read -p "${CYAN}Enter a file/directory name: " name
 
+    if ! validate_name "$name"; then
+        return
+    fi
+
     if [ -e "$current_dir/$name" ]; then
         rm -r "$current_dir/$name"
         echo "Removed: $current_dir/$name"
     else
-        echo "${RED}File/directory not found!"
+        echo "${RED}File/directory not found!${RESET}"
     fi
-
-    echo "${RESET}"
 }
 
 # Display a custom message
 display_message() {
     read -p "${CYAN}Enter a message: " message
 
-    echo "${GREEN}$message"
-    echo "${RESET}"
+    echo "${GREEN}$message${RESET}"
 }
 
 # Check the permissions of a file
 check_permissions() {
     read -p "${CYAN}Enter a file name: " file
 
+    if ! validate_name "$file"; then
+        return
+    fi
+
     if [ -f "$current_dir/$file" ]; then
         echo "${MAGENTA}Permissions of $file:"
         ls -l "$current_dir/$file"
     else
-        echo "${RED}File not found!"
+        echo "${RED}File not found!${RESET}"
     fi
-
-    echo "${RESET}"
 }
 
-# Read the contents of a system file
+# Read a system file
 read_system_file() {
     read -p "${CYAN}Enter a system file name (e.g., /etc/hosts): " file
+
+    if ! validate_name "$file"; then
+        return
+    fi
 
     if [ -f "$file" ]; then
         echo "${MAGENTA}Contents of $file:"
         cat "$file"
     else
-        echo "${RED}File not found!"
+        echo "${RED}File not found!${RESET}"
     fi
-
-    echo "${RESET}"
 }
 
 # Create a symbolic link to a file or directory
@@ -147,29 +171,51 @@ create_symlink() {
     read -p "${CYAN}Enter a file/directory name to symlink: " name
     read -p "Enter a symlink name: " symlink_name
 
+    if ! validate_name "$name"; then
+        return
+    fi
+
     if [ -e "$current_dir/$name" ]; then
         ln -s "$current_dir/$name" "$current_dir/$symlink_name"
         echo "Created symlink: $current_dir/$symlink_name"
     else
-        echo "${RED}File/directory not found!"
+        echo "${RED}File/directory not found!${RESET}"
     fi
-
-    echo "${RESET}"
 }
 
 # Search for a file or directory
 search_item() {
     read -p "${CYAN}Enter a keyword to search: " keyword
 
+    if ! validate_name "$keyword"; then
+        return
+    fi
+
     echo "${MAGENTA}Search results for \"$keyword\":"
     find "$current_dir" -iname "*$keyword*" -exec ls -ld {} \;
     echo "${RESET}"
 }
 
+# Display the help menu
+show_help() {
+    echo "${GREEN}Available commands:"
+    echo "- ls: List files and directories"
+    echo "- cd: Change directory"
+    echo "- cat: Read a file"
+    echo "- mkdir: Create a directory"
+    echo "- rm: Remove a file or directory"
+    echo "- echo: Display a custom message"
+    echo "- permissions: Check file permissions"
+    echo "- readfile: Read a system file"
+    echo "- symlink: Create a symbolic link"
+    echo "- search: Search for a file or directory"
+    echo "- exit: Exit the game"
+    echo "${RESET}"
+}
+
 # Exit the game
 exit_game() {
-    echo "${GREEN}Thanks for playing!"
-    echo "${RESET}"
+    echo "${GREEN}Thanks for playing!${RESET}"
     exit 0
 }
 
@@ -178,7 +224,7 @@ game_loop() {
     while true; do
         display_directory
 
-        read -p "${CYAN}Enter a command (ls/cd/cat/mkdir/rm/echo/permissions/readfile/symlink/search/exit): " command
+        read -p "${CYAN}Enter a command (type 'help' for available commands): " command
 
         case $command in
             ls)
@@ -214,14 +260,17 @@ game_loop() {
             exit)
                 exit_game
                 ;;
+            help)
+                show_help
+                ;;
             *)
-                echo "${RED}Invalid command!"
-                echo "${RESET}"
+                echo "${RED}Invalid command!${RESET}"
                 ;;
         esac
 
+        # Check if the hidden treasure has been found
         if [ -f "$current_dir/treasure.txt" ]; then
-            echo "${GREEN}Congratulations! You found the hidden treasure!"
+            echo "${GREEN}Congratulations! You found the hidden treasure!${RESET}"
             exit_game
         fi
     done
@@ -229,10 +278,6 @@ game_loop() {
 
 #########################################################################################
 
-# Main function #
+# Main function
 welcome_message
-
-# Starting directory
-current_dir=$(pwd)
-
 game_loop
