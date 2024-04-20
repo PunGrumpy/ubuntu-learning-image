@@ -34,23 +34,23 @@ RUN mkdir -p /etc/apt/keyrings \
 ########## ----- User Image ----- ##########
 FROM base AS user
 
-ARG USERNAME=default
-RUN useradd -ms /bin/bash ${USERNAME} \
-    && echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+ARG USER=default
+RUN useradd -ms /bin/bash ${USER} \
+    && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-USER ${USERNAME}
+USER ${USER}
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
+ENV PATH="/home/${USER}/.cargo/bin:${PATH}"
 
-WORKDIR /home/${USERNAME}
-COPY ./scripts /home/${USERNAME}/.scripts
-COPY ./config/* /home/${USERNAME}/
+WORKDIR /home/${USER}
+COPY ./scripts /home/${USER}/.scripts
+COPY ./config/* /home/${USER}/
 
-RUN sudo chmod +x /home/${USERNAME}/.scripts/*
+RUN sudo chmod +x /home/${USER}/.scripts/*
 
-RUN sudo cp /home/${USERNAME}/.scripts/game_beginner.sh /usr/bin/game_beginner
+RUN sudo cp /home/${USER}/.scripts/game_beginner.sh /usr/bin/game_beginner
 
-USER ${USERNAME}
+USER ${USER}
 
 CMD ["/bin/bash"]
