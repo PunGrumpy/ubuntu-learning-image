@@ -1,7 +1,7 @@
 #!/bin/bash
 
 clear
-echo "Welcome $(printenv USERNAME) to Ubuntu $(lsb_release -rs) (GNU/Linux $(uname -r))"
+echo "Welcome $USER to Ubuntu $(lsb_release -rs) (GNU/Linux $(uname -r))"
 echo
 echo " * Documentation:  https://help.ubuntu.com"
 echo " * Management:     https://landscape.canonical.com"
@@ -9,7 +9,7 @@ echo " * Support:        https://ubuntu.com/advantage"
 echo
 echo "  System information as of $(date)"
 echo
-echo "$(landscape-sysinfo)"
+landscape-sysinfo || echo "Error: Unable to retrieve system information."
 echo
 updates=$(apt list --upgradable 2>/dev/null | grep -c '/')
 if [[ $updates -gt 0 ]]; then
