@@ -6,12 +6,8 @@ case $- in
 esac
 
 HISTCONTROL=ignoreboth
-
-shopt -s histappend
-
 HISTSIZE=1000
 HISTFILESIZE=2000
-
 shopt -s checkwinsize
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -33,28 +29,22 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1) \[\033[00m\]\[\033[01;35m\]\t\[\033[00m\]\n❯ '
+    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1) \[\033[00m\]\[\033[01;35m\]\t\[\033[00m\]\n❯ "
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1) \t\n❯ "
 fi
 unset color_prompt force_color_prompt
 
-case "$TERM" in
-xterm*|rxvt*)
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1) \[\033[00m\]\[\033[01;35m\]\t\[\033[00m\]\n❯ '
-    ;;
-*)
-    ;;
-esac
+shopt -s checkwinsize
 
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-if [ -d "$HOME/.cargo/bin" ] ; then
+if [ -d "$HOME/.cargo/bin" ]; then
     export PATH="$HOME/.cargo/bin:$PATH"
 fi
 
 if [ -f ~/.scripts/welcome.sh ]; then
-    bash ~/.scripts/welcome.sh
+    source ~/.scripts/welcome.sh
 fi
 
 if [ -f ~/.bash_aliases ]; then
