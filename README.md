@@ -49,7 +49,8 @@ docker run -it --rm --name ubuntu-learning pungrumpy/ubuntu-learning bash -c "ga
 - [x] `python3`
 - [x] `python3-pip`
 - [x] `cargo`
-- [x] `lsd`
+- [x] `eza`
+- [x] `neovim`
 
 ## `📜` License
 
