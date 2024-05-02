@@ -18,9 +18,9 @@ echo
 
 updates=$(apt list --upgradable 2>/dev/null | grep -c '/')
 if [[ $updates -gt 0 ]]; then
-  echo "$updates updates are available."
+	echo "$updates updates are available."
 else
-  echo "No updates available."
+	echo "No updates available."
 fi
 echo
 
