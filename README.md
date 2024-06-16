@@ -18,7 +18,8 @@ This image is built for personal use, and for learning linux and docker.
 
 ![screenshot](.github/assets/screenshot.png)
 
-> **Note**: You can see alias on [`.bash_aliases`](./config/.bash_aliases) file.
+> [!Note]
+> You can see alias on [`.bash_aliases`](./config/.bash_aliases) file.
 
 ## `📝` Usage
 
@@ -40,7 +41,8 @@ docker run -it --rm --name ubuntu-learning pungrumpy/ubuntu-learning
 docker run -it --rm --name ubuntu-learning pungrumpy/ubuntu-learning bash -c "game_beginner"
 ```
 
-> **Note**: If you userr `--rm` flag, all data will be lost after exiting the container. and if you want to keep the data, should remove the `--rm` flag.
+> [!Note]
+> If you userr `--rm` flag, all data will be lost after exiting the container. and if you want to keep the data, should remove the `--rm` flag.
 
 ## `📦` Packages
 
